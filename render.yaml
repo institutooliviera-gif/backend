@@ -1,0 +1,37 @@
+# Deploy automático no Render via "Blueprint" (New > Blueprint > selecionar este repositório).
+# Se preferir, os mesmos valores podem ser configurados manualmente criando
+# um "Web Service" comum, sem usar este arquivo.
+services:
+  - type: web
+    name: instituto-oliveira-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: MONGODB_DB_NAME
+        value: instituto_oliveira
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: JWT_ALGORITHM
+        value: HS256
+      - key: JWT_EXPIRATION_MINUTES
+        value: "720"
+      - key: CORS_ORIGINS
+        value: https://www.institutooliveira.com,https://institutooliveira.com
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: ADMIN_SEED_EMAIL
+        value: institutooliveira7@gmail.com
+      - key: ADMIN_SEED_SENHA
+        sync: false
